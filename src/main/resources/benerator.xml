@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!--
+  ~ Licensed to the Apache Software Foundation (ASF) under one
+  ~ or more contributor license agreements.  See the NOTICE file
+  ~ distributed with this work for additional information
+  ~ regarding copyright ownership.  The ASF licenses this file
+  ~ to you under the Apache License, Version 2.0 (the
+  ~ "License"); you may not use this file except in compliance
+  ~ with the License.  You may obtain a copy of the License at
+  ~
+  ~   http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing,
+  ~ software distributed under the License is distributed on an
+  ~ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  ~ KIND, either express or implied.  See the License for the
+  ~ specific language governing permissions and limitations
+  ~ under the License.
+  -->
+
+<setup>
+
+    <import class="com.stratio.data.PersonRegisterConsumer"/>
+    <import class="com.stratio.data.RegisterConsumer"/>
+    <import class="org.databene.platform.java.JavaInvoker"/>
+
+    <bean id="dateTimeGen" class="DateTimeGenerator">
+        <property name="minDate" value="2014-01-01"/>
+        <property name="maxDate" value="2014-06-10"/>
+        <property name="dateDistribution" value="random"/>
+        <property name="minTime" value="05:00:00"/>
+        <property name="maxTime" value="23:00:00"/>
+        <property name="timeGranularity" value="00:00:01"/>
+        <property name="timeDistribution" value="random"/>
+    </bean>
+
+    <bean id="servicePerson" spec="new PersonRegisterConsumer('localhost','test')"/>
+    <bean id="consumerPersonRegister" spec="new JavaInvoker(servicePerson, 'write')"/>
+
+    <bean id="serviceRegister" spec="new RegisterConsumer('localhost','test')"/>
+    <bean id="consumerRegister" spec="new JavaInvoker(serviceRegister, 'write')"/>
+
+
+    <generate type="personRegister" count="100" consumer="consumerPersonRegister">
+        <variable name="person" generator="org.databene.domain.person.PersonGenerator"/>
+
+        <attribute name="MSDIN" pattern="[0-9]{15}"/>
+        <attribute name="firstName" script="person.givenName"/>
+        <attribute name="lastName" script="person.familyName"/>
+        <attribute name="birthDate" type="date" script="person.birthDate"/>
+        <attribute name="gender" script="person.gender"/>
+
+        <generate type="register" count="1000" consumer="consumerRegister">
+            <id name="id" generator="UUIDGenerator"/>
+            <attribute name="MSDIN" script="personRegister.MSDIN"/>
+            <attribute name="firstName" script="personRegister.firstName"/>
+            <attribute name="lastName" script="personRegister.lastName"/>
+            <attribute name="birthDate" type="date" script="personRegister.birthDate"/>
+            <attribute name="gender" script="personRegister.gender"/>
+            <attribute name="codPacote" pattern="6[0-9]{8}"/>
+            <attribute name="dateTime" type="date" generator="dateTimeGen"/>
+            <attribute name="value" type="int" min="1" max="100"/>
+            <attribute name="type" pattern="[A-D]"/>
+        </generate>
+
+    </generate>
+
+    <echo>Generated data:</echo>
+    <execute type="shell">cat personRegister.csv</execute>
+    <execute type="shell">cat register.csv</execute>
+</setup>
