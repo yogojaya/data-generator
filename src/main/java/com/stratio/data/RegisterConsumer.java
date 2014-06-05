@@ -33,7 +33,7 @@ public class RegisterConsumer {
   private static final String CREATE_TABLE_IF_EXIST =
       "CREATE TABLE IF NOT EXISTS Register (id text, MSDIN text, firstName text, "
           + "lastName text, birthDate timestamp, gender text, codPacote text, "
-          + "dateTime timestamp, value int, type text, primary key (id));";
+          + "dateTime timestamp, value int, type text, country text, primary key (id));";
   private static final int NUM_BATCH_STATEMENT = 100;
   private Session session;
 
@@ -55,7 +55,7 @@ public class RegisterConsumer {
             .value("lastName", register.getLastName()).value("birthDate", register.getBirthDate())
             .value("gender", register.getGender()).value("codPacote", register.getCodPacote())
             .value("dateTime", register.getDateTime()).value("value", register.getValue())
-            .value("type", register.getType());
+            .value("type", register.getType()).value("country",register.getCountry());
 
     batchStatement.add(query);
     numStatement++;

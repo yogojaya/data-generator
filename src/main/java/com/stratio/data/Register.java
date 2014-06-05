@@ -20,7 +20,6 @@
 package com.stratio.data;
 
 import java.util.Date;
-import java.util.UUID;
 
 public class Register {
   /*
@@ -39,9 +38,10 @@ public class Register {
   private final Date dateTime;
   private final Integer value;
   private final String type;
+  private final String country;
 
   private Register(String id, String msdin, String firstName, String lastName, Date birthDate,
-      String gender, String codPacote, Date dateTime, Integer value, String type) {
+      String gender, String codPacote, Date dateTime, Integer value, String type, String country) {
     this.id = id;
     this.msdin = msdin;
     this.firstName = firstName;
@@ -52,6 +52,7 @@ public class Register {
     this.dateTime = dateTime;
     this.value = value;
     this.type = type;
+    this.country = country;
   }
 
 
@@ -66,8 +67,9 @@ public class Register {
     Date dateTime = (Date) args[7];
     Integer value = (Integer) args[8];
     String type = args[9].toString();
+    String country = args[10].toString();
     return new Register(id, msdin, firstName, lastName, birthDate, gender, codPacote, dateTime,
-        value, type);
+        value, type, country);
   }
 
 
@@ -110,5 +112,9 @@ public class Register {
 
   public String getId() {
     return id;
+  }
+
+  public String getCountry() {
+    return country;
   }
 }

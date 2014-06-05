@@ -23,6 +23,8 @@
     <import class="com.stratio.data.PersonRegisterConsumer"/>
     <import class="com.stratio.data.RegisterConsumer"/>
     <import class="org.databene.platform.java.JavaInvoker"/>
+    <import defaults="true"
+            domains="person,address" />
 
     <bean id="dateTimeGen" class="DateTimeGenerator">
         <property name="minDate" value="2014-01-01"/>
@@ -61,11 +63,8 @@
             <attribute name="dateTime" type="date" generator="dateTimeGen"/>
             <attribute name="value" type="int" min="1" max="100"/>
             <attribute name="type" pattern="[A-D]"/>
+            <attribute name="country" generator="CountryGenerator" />
         </generate>
 
     </generate>
-
-    <echo>Generated data:</echo>
-    <execute type="shell">cat personRegister.csv</execute>
-    <execute type="shell">cat register.csv</execute>
 </setup>
