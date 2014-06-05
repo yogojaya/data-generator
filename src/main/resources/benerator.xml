@@ -43,7 +43,7 @@
     <bean id="consumerRegister" spec="new JavaInvoker(serviceRegister, 'write')"/>
 
 
-    <generate type="personRegister" count="100" consumer="consumerPersonRegister">
+    <generate type="personRegister" count="100000" consumer="consumerPersonRegister">
         <variable name="person" generator="org.databene.domain.person.PersonGenerator"/>
 
         <attribute name="MSDIN" pattern="[0-9]{15}"/>
@@ -52,7 +52,7 @@
         <attribute name="birthDate" type="date" script="person.birthDate"/>
         <attribute name="gender" script="person.gender"/>
 
-        <generate type="register" count="1000" consumer="consumerRegister">
+        <generate type="register" count="10000" consumer="consumerRegister">
             <id name="id" generator="UUIDGenerator"/>
             <attribute name="MSDIN" script="personRegister.MSDIN"/>
             <attribute name="firstName" script="personRegister.firstName"/>
