@@ -19,13 +19,11 @@
 
 package com.stratio.data;
 
-import com.datastax.driver.core.BatchStatement;
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Session;
-import com.datastax.driver.core.Statement;
-import com.datastax.driver.core.querybuilder.QueryBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.datastax.driver.core.*;
+import com.datastax.driver.core.querybuilder.QueryBuilder;
 
 public class PersonRegisterConsumer {
   private static final Logger LOGGER = LoggerFactory.getLogger(PersonRegisterConsumer.class);
@@ -50,7 +48,8 @@ public class PersonRegisterConsumer {
     Statement query =
         QueryBuilder.insertInto("PersonRegister").value("MSDIN", person.getMsdin())
             .value("firstName", person.getFirstName()).value("lastName", person.getLastName())
-            .value("birthDate", person.getBirthDate()).value("gender", person.getGender());
+            .value("birthDate", person.getBirthDate()).value("gender", person.getGender())
+            .setConsistencyLevel(ConsistencyLevel.QUORUM);;
     batchStatement.add(query);
     numStatement++;
     if (numStatement == NUM_BATCH_STATEMENT) {

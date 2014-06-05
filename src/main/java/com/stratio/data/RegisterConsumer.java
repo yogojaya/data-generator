@@ -19,13 +19,10 @@
 
 package com.stratio.data;
 
+import com.datastax.driver.core.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.datastax.driver.core.BatchStatement;
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Session;
-import com.datastax.driver.core.Statement;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
 
 public class RegisterConsumer {
@@ -45,6 +42,7 @@ public class RegisterConsumer {
     Cluster cluster = Cluster.builder().addContactPoint(host).build();
     session = cluster.connect(keyspace);
     session.execute(CREATE_TABLE_IF_EXIST);
+
   }
 
   public void write(Object[] args) {
@@ -55,7 +53,8 @@ public class RegisterConsumer {
             .value("lastName", register.getLastName()).value("birthDate", register.getBirthDate())
             .value("gender", register.getGender()).value("codPacote", register.getCodPacote())
             .value("dateTime", register.getDateTime()).value("value", register.getValue())
-            .value("type", register.getType()).value("country",register.getCountry());
+            .value("type", register.getType()).value("country",register.getCountry())
+            .setConsistencyLevel(ConsistencyLevel.QUORUM);
 
     batchStatement.add(query);
     numStatement++;
