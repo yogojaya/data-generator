@@ -49,7 +49,8 @@ public class Register {
     this.birthDate = birthDate;
     this.gender = gender;
     this.codPacote = codPacote;
-    this.dateTime = dateTime;
+    this.dateTime = dateTime;//final can change???
+    
     this.value = value;
     this.type = type;
     this.country = country;
